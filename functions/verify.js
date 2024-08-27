@@ -11,21 +11,21 @@ exports.handler = async function(event, context) {
       return {
         statusCode: 200,
         body: JSON.stringify({
-          message: "SRN verified successfully!",
+          message: "PRN verified successfully!",
           inviteLink: process.env.WHATSAPP_INVITE_LINK 
         })
       };
     } else {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: "Failed to verify SRN. Please check the details." })
+        body: JSON.stringify({ message: "Failed to verify PRN. Please check the details." })
       };
     }
   } catch (error) {
     console.error("Error during verification:", error.message, error.response?.data);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "An error occurred while verifying the SRN. Please try again later." })
+      body: JSON.stringify({ message: "An error occurred while verifying the PRN. Please try again later." })
     };
   }
 };
