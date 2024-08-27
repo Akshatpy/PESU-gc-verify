@@ -1,38 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PESUAcademy Verification</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRN Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
+    input, button {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-    <h2>Join the University WhatsApp Group</h2>
-    <form id="loginForm">
-        <label for="username">PESUAcademy Username:</label><br>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="password">PESUAcademy Password:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-        <button type="submit">Submit</button>
+  <div class="container">
+    <h1>SRN Verification</h1>
+    <form id="verificationForm">
+      <label for="username">SRN Number:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">First Four Letters of Name:</label>
+      <input type="text" id="password" name="password" required>
+
+      <button type="submit">Verify SRN</button>
     </form>
-    <p id="responseMessage"></p>
+    <div id="result" class="result"></div>
+  </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+  <script>
+    document.getElementById('verificationForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); // Prevent the form from submitting the traditional way
 
-            const response = await fetch('/api/verify', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
 
-            const data = await response.json();
-            document.getElementById('responseMessage').textContent = data.message;
+      try {
+        const response = await fetch('/api/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password })
         });
-    </script>
+
+        const result = await response.json();
+
+        if (response.ok) {
+          document.getElementById('result').innerHTML = `<p>${result.message}</p><p>Invite Link: <a href="${result.inviteLink}" target="_blank">${result.inviteLink}</a></p>`;
+        } else {
+          document.getElementById('result').innerText = result.message;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('result').innerText = "An error occurred. Please try again.";
+      }
+    });
+  </script>
 </body>
 </html>
