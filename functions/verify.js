@@ -1,3 +1,5 @@
+exports.handler = async function(event, context) {
+  // Your verification logic goes here
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
@@ -42,3 +44,8 @@ app.post('/api/verify', async (req, res) => {
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: 'Verification API is working!' })
+  };
+};
